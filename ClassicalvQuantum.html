@@ -1,0 +1,539 @@
+<!DOCTYPE html>​
+
+<html lang="en">​
+
+<head>​
+
+    <meta charset="UTF-8">​
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">​
+
+    <title>Classical vs Quantum Computing</title>​
+
+    <script src="https://cdn.tailwindcss.com"></script>​
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>​
+
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;600;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">​
+
+    <script src="https://unpkg.com/lucide@latest"></script>​
+
+    <style>​
+
+        body {​
+
+            font-family: 'Raleway', sans-serif;​
+
+            background-color: #ffffff;​
+
+            color: #000000;​
+
+        }​
+
+        h1, h2, h3 {​
+
+            font-family: 'Raleway', sans-serif;​
+
+            letter-spacing: -0.05em;​
+
+        }​
+
+        .serif-title {​
+
+            font-family: 'Playfair Display', serif;​
+
+        }​
+
+        /* Blackrock-style table: minimal vertical lines, strong horizontal dividers */​
+
+        .br-table th {​
+
+            border-bottom: 2px solid #000;​
+
+            text-transform: uppercase;​
+
+            font-size: 0.75rem;​
+
+            letter-spacing: 0.1em;​
+
+            padding-bottom: 1rem;​
+
+        }​
+
+        .br-table td {​
+
+            border-bottom: 1px solid #e5e5e5;​
+
+            padding-top: 1rem;​
+
+            padding-bottom: 1rem;​
+
+        }​
+
+        .br-table tr:last-child td {​
+
+            border-bottom: 2px solid #000;​
+
+        }​
+
+    </style>​
+
+</head>​
+
+<body class="p-4 md:p-12 min-h-screen flex flex-col items-center">​
+
+ ​
+
+    <!-- Main Container (A4 Ratio-ish) -->​
+
+    <div class="max-w-5xl w-full bg-white">​
+
+        ​
+
+        <!-- Content Grid -->​
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">​
+
+ ​
+
+            <!-- Left Column: The Table -->​
+
+            <section>​
+
+                <div class="flex items-center gap-2 mb-6">​
+
+                    <i data-lucide="table-2" class="w-5 h-5"></i>​
+
+                    <h3 class="text-lg font-bold uppercase tracking-wider">Structural Comparison</h3>​
+
+                </div>​
+
+ ​
+
+                <table class="w-full text-left br-table">​
+
+                    <thead>​
+
+                        <tr>​
+
+                            <th class="w-1/4">Feature</th>​
+
+                            <th class="w-1/3">Classical</th>​
+
+                            <th class="w-1/3">Quantum</th>​
+
+                        </tr>​
+
+                    </thead>​
+
+                    <tbody class="text-sm md:text-base">​
+
+                        <tr>​
+
+                            <td class="font-bold text-gray-500">Basic Unit</td>​
+
+                            <td class="font-semibold">Bit (0 or 1)</td>​
+
+                            <td class="font-semibold bg-black text-white px-2">Qubit (Superposition)</td>​
+
+                        </tr>​
+
+                        <tr>​
+
+                            <td class="font-bold text-gray-500">Processing</td>​
+
+                            <td>Sequential logic</td>​
+
+                            <td>Simultaneous probability</td>​
+
+                        </tr>​
+
+                        <tr>​
+
+                            <td class="font-bold text-gray-500">Power Source</td>​
+
+                            <td>Transistors</td>​
+
+                            <td>Subatomic particles</td>​
+
+                        </tr>​
+
+                        <tr>​
+
+                            <td class="font-bold text-gray-500">Scaling</td>​
+
+                            <td>Linear (1:1)</td>​
+
+                            <td>Exponential (2<sup>N</sup>)</td>​
+
+                        </tr>​
+
+                        <tr>​
+
+                            <td class="font-bold text-gray-500">Ideal For</td>​
+
+                            <td>Arithmetic, Standard Logic</td>​
+
+                            <td>Optimization, molecular sim</td>​
+
+                        </tr>​
+
+                         <tr>​
+
+                            <td class="font-bold text-gray-500">Constraints</td>​
+
+                            <td>Physical Limits / Heat</td>​
+
+                            <td>Decoherence / Noise</td>​
+
+                        </tr>​
+
+                    </tbody>​
+
+                </table>​
+
+                ​
+
+                <div class="mt-8 p-6 bg-gray-50 border-l-4 border-black">​
+
+                    <p class="font-serif italic text-lg leading-relaxed">​
+
+                        "While a classical computer reads every book in a library one by one, a quantum computer reads all of them at once."​
+
+                    </p>​
+
+                </div>​
+
+            </section>​
+
+ ​
+
+            <!-- Right Column: The Chart -->​
+
+            <section>​
+
+                <div class="flex items-center gap-2 mb-6">​
+
+                    <i data-lucide="trending-up" class="w-5 h-5"></i>​
+
+                    <h3 class="text-lg font-bold uppercase tracking-wider">Performance Scaling</h3>​
+
+                </div>​
+
+ ​
+
+                <div class="relative w-full aspect-square border border-gray-200 p-4">​
+
+                    <canvas id="scalingChart"></canvas>​
+
+                    ​
+
+                    <!-- Chart Annotations Overlay -->​
+
+                    <div class="absolute top-1/4 left-1/4 bg-white border border-black p-2 shadow-lg hidden md:block">​
+
+                        <span class="block text-xs font-bold uppercase text-gray-500">Quantum Advantage</span>​
+
+                        <span class="block text-xl font-bold">Exponential</span>​
+
+                    </div>​
+
+                </div>​
+
+ ​
+
+                <div class="grid grid-cols-2 gap-4 mt-6">​
+
+                    <div class="border-t border-black pt-2">​
+
+                        <span class="block text-xs uppercase tracking-wider text-gray-500">Classical Trend</span>​
+
+                        <span class="block text-lg font-bold">O(N)</span>​
+
+                        <p class="text-xs text-gray-600 mt-1">Resource requirements grow linearly with complexity.</p>​
+
+                    </div>​
+
+                    <div class="border-t border-black pt-2">​
+
+                        <span class="block text-xs uppercase tracking-wider text-gray-500">Quantum Trend</span>​
+
+                        <span class="block text-lg font-bold">O(2<sup>N</sup>)</span>​
+
+                        <p class="text-xs text-gray-600 mt-1">Computational space doubles with every added qubit.</p>​
+
+                    </div>​
+
+                </div>​
+
+            </section>​
+
+        </div>​
+
+ ​
+
+    </div>​
+
+ ​
+
+    <script>​
+
+        // Initialize Lucide icons​
+
+        lucide.createIcons();​
+
+ ​
+
+        // Chart Configuration​
+
+        const ctx = document.getElementById('scalingChart').getContext('2d');​
+
+ ​
+
+        // Generate data points​
+
+        const labels = Array.from({length: 10}, (_, i) => i + 1); // 1 to 10​
+
+        const classicalData = labels.map(x => x);       // y = x​
+
+        const quantumData = labels.map(x => Math.pow(2, x - 3)); // y = 2^x (scaled down slightly for visual fit)​
+
+ ​
+
+        // Custom Plugin for white background​
+
+        const whiteBackgroundPlugin = {​
+
+            id: 'customCanvasBackgroundColor',​
+
+            beforeDraw: (chart) => {​
+
+                const ctx = chart.canvas.getContext('2d');​
+
+                ctx.save();​
+
+                ctx.globalCompositeOperation = 'destination-over';​
+
+                ctx.fillStyle = 'white';​
+
+                ctx.fillRect(0, 0, chart.width, chart.height);​
+
+                ctx.restore();​
+
+            }​
+
+        };​
+
+ ​
+
+        new Chart(ctx, {​
+
+            type: 'line',​
+
+            data: {​
+
+                labels: labels,​
+
+                datasets: [​
+
+                    {​
+
+                        label: 'Classical (Linear)',​
+
+                        data: classicalData,​
+
+                        borderColor: '#9ca3af', // Gray-400​
+
+                        borderWidth: 2,​
+
+                        borderDash: [5, 5],​
+
+                        pointRadius: 0,​
+
+                        tension: 0,​
+
+                        fill: false​
+
+                    },​
+
+                    {​
+
+                        label: 'Quantum (Exponential)',​
+
+                        data: quantumData,​
+
+                        borderColor: '#000000', // Pure Black​
+
+                        borderWidth: 3,​
+
+                        pointBackgroundColor: '#000000',​
+
+                        pointRadius: 3,​
+
+                        tension: 0.4, // Smooth curve​
+
+                        fill: {​
+
+                            target: 'origin',​
+
+                            above: 'rgba(0, 0, 0, 0.05)' // Very subtle grey fill​
+
+                        }​
+
+                    }​
+
+                ]​
+
+            },​
+
+            options: {​
+
+                responsive: true,​
+
+                maintainAspectRatio: false,​
+
+                plugins: {​
+
+                    legend: {​
+
+                        position: 'bottom',​
+
+                        labels: {​
+
+                            font: {​
+
+                                family: "'Raleway', sans-serif",​
+
+                                size: 12,​
+
+                                weight: 'bold'​
+
+                            },​
+
+                            usePointStyle: true,​
+
+                            pointStyle: 'line',​
+
+                            color: '#000'​
+
+                        }​
+
+                    },​
+
+                    title: {​
+
+                        display: false​
+
+                    },​
+
+                    tooltip: {​
+
+                        backgroundColor: '#000',​
+
+                        titleFont: { family: 'Raleway' },​
+
+                        bodyFont: { family: 'Raleway' },​
+
+                        padding: 10,​
+
+                        cornerRadius: 0, // Sharp edges​
+
+                        displayColors: false​
+
+                    }​
+
+                },​
+
+                scales: {​
+
+                    x: {​
+
+                        grid: {​
+
+                            display: false,​
+
+                            drawBorder: true,​
+
+                            borderColor: '#000',​
+
+                            borderWidth: 2​
+
+                        },​
+
+                        ticks: {​
+
+                            font: { family: 'Raleway' },​
+
+                            color: '#666'​
+
+                        },​
+
+                        title: {​
+
+                            display: true,​
+
+                            text: 'COMPLEXITY (N)',​
+
+                            font: { size: 10, weight: 'bold' },​
+
+                            color: '#000'​
+
+                        }​
+
+                    },​
+
+                    y: {​
+
+                        grid: {​
+
+                            color: '#f0f0f0',​
+
+                            drawBorder: false​
+
+                        },​
+
+                        ticks: {​
+
+                            display: false // Hide Y numbers for cleaner "infographic" look​
+
+                        },​
+
+                        title: {​
+
+                            display: true,​
+
+                            text: 'COMPUTING POWER',​
+
+                            font: { size: 10, weight: 'bold' },​
+
+                            color: '#000'​
+
+                        },​
+
+                        beginAtZero: true​
+
+                    }​
+
+                },​
+
+                elements: {​
+
+                    point: {​
+
+                        hitRadius: 20​
+
+                    }​
+
+                }​
+
+            },​
+
+            plugins: [whiteBackgroundPlugin]​
+
+        });​
+
+    </script>​
+
+</body>​
+
+</html>
